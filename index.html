@@ -1,3 +1,7 @@
+
+
+
+
 <!DOCTYPE html>
 <html lang ="en">
     <head>
@@ -25,6 +29,9 @@
         <script>
             const mycanvas = document.getElementById("mycanvas");
             const ctx = mycanvas.getContext("2d");
+           
+           
+            //Figuras con color
             ctx.fillStyle="Red"
             ctx.fillRect(20,20,100,100)
             ctx.fillStyle="black"
@@ -32,9 +39,25 @@
             ctx.fillStyle="pink"
             ctx.fillRect(180,180,100,100)
 
+            //Figura sin relleno
+            ctx.strokeRect(260,260,100,100)
+
+            ctx.strokeStyle="blue"
+            ctx.lineWidth = 5;
+            ctx.strokeRect(360,360,100,100)
+
+            //Triangulo 
+            ctx.beginPath();
+            ctx.fillStyle="Red"
+            ctx.moveTo(300,250)
+            ctx.lineTo(300,450)
+            ctx.lineTo(400,150)
+            ctx.closePath()
+            ctx.stroke();
+            ctx.fill()
+
         </script>
         </body>
         </html>
-
 
 
