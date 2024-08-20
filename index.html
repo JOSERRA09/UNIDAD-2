@@ -103,7 +103,13 @@
         ctx.font = "20px Roman";
         ctx.strokeText("HELLO WORD", 300, 50);
 
-
+        //IMAGEN
+       
+        var img = new Image();
+        img.src = "FCB.png";
+        img.onload = function() {
+          ctx.drawImage(img,600,200, 100, 120);
+        };
 
 
         </script>
