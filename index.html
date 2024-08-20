@@ -112,11 +112,20 @@
         };
 
         ///Rectangulo de color
-        var grd = ctx.createLinearGradient(550,350,200,500);
+        var grd = ctx.createLinearGradient(500,200,200,500);
         grd.addColorStop(0, "#fa0000");
         grd.addColorStop(1, "#0048fa");
         ctx.fillStyle = grd;
         ctx.fillRect(450, 440, 220, 100)
+
+        //Radial
+
+        const grd2 = ctx.createRadialGradient(540, 70, 10, 500, 70, 300); 
+        grd2.addColorStop(0, "#fa0000");
+        grd2.addColorStop(0.5, "#0048fa");
+        grd2.addColorStop(1, "#facc00");
+        ctx.fillStyle = grd2;
+        ctx.fillRect(420, 120, 200, 100);
 
         </script>
         </body>
