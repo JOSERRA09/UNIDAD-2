@@ -11,11 +11,11 @@
         <style>
 
             body{
-                background-color: white;
+                background-color: grey;
                 
             }
             canvas{
-                background-color: grey;
+                background-color: white;
 
             }
         </style>
@@ -64,21 +64,38 @@
             ctx.fill()
 
 
-
-
-        //Circulo sin relleno
-        ctx.strokeStyle="black"
-        ctx.lineWidth = 5;
-        ctx.beginPath();
-        ctx.arc(300, 505, 70, 0, 2 * Math.PI);
+         ctx.beginPath();
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 1
+        ctx.arc(330, 500, 70, 0, 2 * Math.PI);
         ctx.stroke();
+
         
-         //circulo con color
+        
         ctx.beginPath();
-        ctx.arc(250,495, 70, 0, 2 * Math.PI);
-        ctx.fillStyle = "yellow";
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 1
+        ctx.arc(250, 490, 70, 0, 2 * Math.PI);
+        ctx.fillStyle = "orange";
         ctx.fill();
-        
+        ctx.stroke();
+
+        ///Mitad del cirulo
+       
+        ctx.stroke();
+
+// mitad circulo
+
+ctx.beginPath();
+ctx.strokeStyle = "black";
+
+ctx.lineWidth = 1
+ctx.arc(250, 450, 60, 0.9, 0.7 * Math.PI);
+ctx.fillStyle = "red";
+ctx.fill();
+ctx.stroke();
+
+
 
         </script>
         </body>
