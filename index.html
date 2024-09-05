@@ -30,10 +30,69 @@
             const mycanvas = document.getElementById("mycanvas");
             const ctx = mycanvas.getContext("2d");
            
+//////////////////////////////////////////////////CASA ACT 22//////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////AVATAR ACT 21/////////////////////////////////////////////////////////
-             // CABEZA
+ //CASA
+ ctx.fillStyle = '#ea9900';
+        ctx.fillRect(0, 320, 350, 280); 
 
+        //TECHO
+        ctx.fillStyle = 'GREy';
+        ctx.fillRect(0,300, 355, 20);
+
+         //DETALLES
+         ctx.fillStyle = 'BLACK';
+        ctx.fillRect(0,400, 350, 20);
+
+        ctx.fillStyle = 'BLACK';
+        ctx.fillRect(0,350, 350, 20)
+
+
+        ctx.fillStyle = 'BLACK';
+        ctx.fillRect(0,440, 350, 20)
+
+
+          ctx.fillStyle = 'BLACK';
+        ctx.fillRect(0,470, 350, 20)
+
+
+        ctx.fillStyle = 'BLACK';
+        ctx.fillRect(280,230, 50, 70)
+
+        ///RAIZ
+        ctx.fillStyle = '#e36800';
+        ctx.fillRect(590,320,110, 500)
+
+
+        //PUERTA Y VENTANAS
+
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(30, 340, 80, 85);
+        ctx.fillRect(200, 340, 80, 85);
+
+
+        ctx.fillStyle = "#e15000";
+        ctx.fillRect(125, 500, 85, 100);
+
+        //SOL
+
+        ctx.beginPath();
+        ctx.arc(6, 40, 50, 0, 2 * Math.PI); 
+        ctx.fillStyle = "#FFD700";
+        ctx.fill();
+
+        ctx.fillStyle = 'WHITE';
+        ctx.fillRect(290,250, 30, 20)
+
+        ctx.fillStyle = 'GREY';
+        ctx.fillRect(40,250, 10, 50)
+
+        ctx.fillStyle = 'GREY';
+        ctx.fillRect(70,250, 10, 50)
+
+          ctx.fillStyle = 'GREY';
+        ctx.fillRect(100,250, 10, 50)
+         
 function drawciruclo(x,y, radio,color){
 ctx.beginPath();
 ctx.arc(x,y,radio,0,Math.PI * 2,false);
@@ -41,57 +100,93 @@ ctx.fillStyle = color;
 ctx.fill();
 ctx.closePath();
 }
+// //CABERZA
+ drawciruclo(640,240,100, "green");
 
-function draworejas(x,y,radioX, radioY, color){
-  ctx.beginPath();
-  ctx.arc(x,y,radioX,radioY,5,5,Math.PI * 2);
-  ctx.fillStyle =color;
-  ctx.fill();
-  ctx.closePath();
+ drawciruclo(650,200,10, "red");
 
-}
-function drawojos(x,y, radio, color){
-ctx.beginPath();
-ctx.arc(x,y,radio,0,Math.PI * 2,false);
-ctx.fillStyle = color;
-ctx.fill();
-ctx.closePath();
+ drawciruclo(630,290,10, "red");
 
-}
-function drawboca(x,y, radio,color){
-ctx.beginPath();
-ctx.arc(x,y,radio,0,Math.PI * 2,false);
-ctx.fillStyle = color;
-ctx.fill();
-ctx.closePath();
-}
+ drawciruclo(630,240,10, "red");
+
+ drawciruclo(600,250,10, "red");
+
+ drawciruclo(600,200,10, "red");
+
+ drawciruclo(660,270,10, "red");
+
+drawciruclo(190,550,10, "white");
 
 
 
-//CABERZA
- drawciruclo(280,250,100, "yellow");
 
-//ALA IZQUIERDA
-draworejas(180,250,30,70,"yellow");
 
-//ALA DERECHA
-draworejas(380,250,30,70,"yellow");
 
-//OJO IZQUIERDO
-drawojos(250,220,30,"#000000");
-drawojos(250,220,20,"#000000");
 
-//OJO DERECHO
 
-drawojos(320,220,30,"#000000");
-drawojos(320,220,20,"#000000");
 
-//PUPILAS
-drawojos(250,220,5,"#ffffff");
-drawojos(320,220,5,"#ffffff");
 
-//BOCA
-drawboca(285,250,10, "red");
+///////////////////////////////////////////////AVATAR ACT 21/////////////////////////////////////////////////////////
+             // CABEZA
+
+// function drawciruclo(x,y, radio,color){
+// ctx.beginPath();
+// ctx.arc(x,y,radio,0,Math.PI * 2,false);
+// ctx.fillStyle = color;
+// ctx.fill();
+// ctx.closePath();
+// }
+
+// function draworejas(x,y,radioX, radioY, color){
+//   ctx.beginPath();
+//   ctx.arc(x,y,radioX,radioY,5,5,Math.PI * 2);
+//   ctx.fillStyle =color;
+//   ctx.fill();
+//   ctx.closePath();
+
+// }
+// function drawojos(x,y, radio, color){
+// ctx.beginPath();
+// ctx.arc(x,y,radio,0,Math.PI * 2,false);
+// ctx.fillStyle = color;
+// ctx.fill();
+// ctx.closePath();
+
+// }
+// function drawboca(x,y, radio,color){
+// ctx.beginPath();
+// ctx.arc(x,y,radio,0,Math.PI * 2,false);
+// ctx.fillStyle = color;
+// ctx.fill();
+// ctx.closePath();
+// }
+
+
+
+// //CABERZA
+//  drawciruclo(280,250,100, "yellow");
+
+// //ALA IZQUIERDA
+// draworejas(180,250,30,70,"yellow");
+
+// //ALA DERECHA
+// draworejas(380,250,30,70,"yellow");
+
+// //OJO IZQUIERDO
+// drawojos(250,220,30,"#000000");
+// drawojos(250,220,20,"#000000");
+
+// //OJO DERECHO
+
+// drawojos(320,220,30,"#000000");
+// drawojos(320,220,20,"#000000");
+
+// //PUPILAS
+// drawojos(250,220,5,"#ffffff");
+// drawojos(320,220,5,"#ffffff");
+
+// //BOCA
+// drawboca(285,250,10, "red");
 
 
 
