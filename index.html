@@ -1,481 +1,646 @@
-
-
-
-
 <!DOCTYPE html>
-<html lang ="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name = "viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <style>
+<html lang="en">
 
-            body{
-                background-color: grey;
-                
-            }
-            canvas{
-                background-color: aqua;
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      background-color: grey;
 
-            }
-        </style>
+    }
 
-    </head>
-    <body>
+    canvas {
+      background-color: white;
+
+    }
+  </style>
+
+</head>
+
+<body>
 
 
-        <canvas id="mycanvas" width="700" height="600" ></canvas>
-  
-        <script>
+  <canvas id="mycanvas" width="600" height="500"></canvas>
+
+  <script type="">
             const mycanvas = document.getElementById("mycanvas");
             const ctx = mycanvas.getContext("2d");
+  
 
-    ////////////////////////////////////////////////SONIC ACT 24/////////////////////////////////////////////////////////////////////
+var direction = "";
+var speed = 5;
+var score = 0;
+var pausa = false;
+var wall1234=[];
 
-    ctx.beginPath();
-
-ctx.fillStyle = "#b65300";
-ctx.fillRect(0, 430, 950, 180);
-
-  ctx.strokeStyle = "#000000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(0, 430, 950, 180); 
-
-
-      //CUBO 1 
-ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(0, 430, 40, 40);
-
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(0, 430, 40, 40);
-
-  //CUBO 2
-  ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(70, 430, 40, 40);
-
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(70, 430, 40, 40);
+const bart = new Audio("ay-caramba.mp3");
+const Intro = new Audio("Los simpson.mp3");
+Intro.loop = true;
+Intro.controls = true;
 
 
-  //CUBO 3
-  ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(140, 430, 40, 40);
+const playerImage = new Image();
+playerImage.src = 'BartBatman.png';
 
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(140, 430, 40, 40);
+const targetImage = new Image();
+targetImage.src = 'HambuerguesaKrusty.png'; 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class Rectangulo { 
+  constructor(color,w,h,x,y,speed) {
+    this.color = color;
+    this.h = h;
+    this.w = w;
+    this.x = x;
+    this.y = y;
+    this.speed = speed;
+  }  
+
+  colision(move) {
+    if (
+      this.x < move.x + move.w &&
+      this.x + this.w > move.x &&
+      this.y < move.y + move.h &&
+      this.y + this.h > move.y
+    ) {
+      return true;
+    }
+    return false;
+  }
+}
+
+// Cubo
+var player = new Rectangulo("#db0000", 50, 50, 190, 120, 5);
+var target = new Rectangulo("#000000", 50, 50, 300, 190);
+
+// Bloques
+wall1234.push(new Rectangulo("#00b4b9", 350, 15, 120, 400));
+wall1234.push(new Rectangulo("#00b4b9", 350, 15, 130, 50));
+wall1234.push(new Rectangulo("#00b4b9", 50, 190, 50, 150));
+wall1234.push(new Rectangulo("#00b4b9", 50, 190, 500, 150));
+
+// Movimiento
+document.addEventListener('keypress', function(e) {
+  switch(e.keyCode) {
+    case 119:
+      direction = 'up';
+      break;
+    case 115:
+      direction = 'down';
+      break;
+    case 97:
+      direction = 'left';
+      break;
+    case 100:
+      direction = 'right';
+      break;
+    case 32:
+      pausa = !pausa;
+      break;
+  }
+});
+
+// Actualizar posición
+function update() {
+  if (!pausa) {
+    switch (direction) {
+      case 'up':
+        player.y -= speed;
+        if (player.y <= 0) player.y = 500;
+        break;
+      case 'down':
+        player.y += speed;
+        if (player.y > 500) player.y = 0;
+        break;
+      case 'right':
+        player.x += speed;
+        if (player.x > 500) player.x = 0;
+        break;
+      case 'left':
+        player.x -= speed;
+        if (player.x <= 0) player.x = 600;
+        break;
+    }
+
+    if (player.colision(target)) {
+      score++;
+      speed++;
+      bart.play();
+      Intro.play();
+      target.x = Math.floor(Math.random() * 500);
+      target.y = Math.floor(Math.random() * 500);
+    }
+
+    wall1234.forEach(function(wall1234) {
+      if (player.colision(wall1234)) {
+        switch (direction) {
+          case 'up':
+            player.y += speed;
+            break;
+          case 'down':
+            player.y -= speed;
+            break;
+          case 'right':
+            player.x -= speed;
+            break;
+          case 'left':
+            player.x += speed;
+            break;
+        }
+      }
+    });
+  }
+}
 
 
-    //CUBO 4
-ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(210, 430, 40, 40);
 
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(210, 430, 40, 40);
+function pintar() {
 
 
-   //CUBO 5
-ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(280, 430, 40, 40);
+  if (pausa) {
+    ctx.fillStyle = "#939393";
+    ctx.fillRect(0, 0, 600, 700);
+    ctx.fillStyle = "#000000";
+    ctx.font = "80px Arial";
+    ctx.fillText("P A U S E", 130, 200);
+  } else {
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, 600, 500);
+  }
 
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(280, 430, 40, 40);
+  ctx.font = "35px Arial";
+  ctx.fillStyle = "#000000";
+  ctx.fillText("score: " + score, 220, 30);
 
-
-   //CUBO 6
-ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(350, 430, 40, 40);
-
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(350, 430, 40, 40);
-
-  //CUBO 7
-  ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(350, 430, 40, 40);
-
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(350, 430, 40, 40);
+  
+  ctx.drawImage(playerImage, player.x, player.y, player.w, player.h);
+  
+  ctx.drawImage(targetImage, target.x, target.y, target.w, target.h);
 
 
-      //CUBO 8
-  ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(420, 430, 40, 40);
+      //  ctx.fillStyle= target.color;
+			// ctx.fillRect(target.x, target.y,target.w, target.h)  
 
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(420, 430, 40, 40);
+  wall1234.forEach(function(wall1234) {
+    ctx.fillStyle = wall1234.color;
+    ctx.fillRect(wall1234.x, wall1234.y, wall1234.w, wall1234.h);
+    ctx.strokeRect(wall1234.x, wall1234.y, wall1234.w, wall1234.h);
+  });
+
+  update();
+  requestAnimationFrame(pintar);
+}
+
+requestAnimationFrame(pintar);
+
+window.requestAnimationFrame = (function() {
+  return window.requestAnimationFrame ||
+         window.webkitRequestAnimationFrame ||
+         window.mozRequestAnimationFrame ||
+         function(callback) {
+           window.setTimeout(callback, 17);
+         };
+})();
 
 
-      //CUBO 9
-  ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(490, 430, 40, 40);
+    ////////////////////////////////////////////////SONIC ACT 24////////////////////////////////////////////////////////////////////////////////////////////////
 
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(490, 430, 40, 40);
+//     ctx.beginPath();
+
+// ctx.fillStyle = "#b65300";
+// ctx.fillRect(0, 430, 950, 180);
+
+//   ctx.strokeStyle = "#000000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(0, 430, 950, 180); 
+
+
+//       //CUBO 1 
+// ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(0, 430, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(0, 430, 40, 40);
+
+//   //CUBO 2
+//   ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(70, 430, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(70, 430, 40, 40);
+
+
+//   //CUBO 3
+//   ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(140, 430, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(140, 430, 40, 40);
+
+
+//     //CUBO 4
+// ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(210, 430, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(210, 430, 40, 40);
+
+
+//    //CUBO 5
+// ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(280, 430, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(280, 430, 40, 40);
+
+
+//    //CUBO 6
+// ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(350, 430, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(350, 430, 40, 40);
+
+//   //CUBO 7
+//   ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(350, 430, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(350, 430, 40, 40);
+
+
+//       //CUBO 8
+//   ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(420, 430, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(420, 430, 40, 40);
+
+
+//       //CUBO 9
+//   ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(490, 430, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(490, 430, 40, 40);
 
 
 
-      //CUBO 10
-  ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(560, 430, 40, 40);
+//       //CUBO 10
+//   ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(560, 430, 40, 40);
 
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(560, 430, 40, 40);
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(560, 430, 40, 40);
 
 
   
-      //CUBO 11
-      ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(640, 430, 40, 40);
+//       //CUBO 11
+//       ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(640, 430, 40, 40);
 
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(640, 430, 40, 40);
-
-
- // /CUBO 12
-      ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(35, 480, 40, 40);
-
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(35, 480, 40, 40);
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(640, 430, 40, 40);
 
 
-   // /CUBO 13
-   ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(105, 480, 40, 40);
+//  // /CUBO 12
+//       ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(35, 480, 40, 40);
 
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(105, 480, 40, 40);
-
-
-    // /CUBO 14
-   ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(175, 480, 40, 40);
-
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(175, 480, 40, 40);
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(35, 480, 40, 40);
 
 
-  
-    // /CUBO 15
-    ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(245, 480, 40, 40);
+//    // /CUBO 13
+//    ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(105, 480, 40, 40);
 
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(245, 480, 40, 40);
-
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(105, 480, 40, 40);
 
 
-    // /CUBO 16
-    ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(315, 480, 40, 40);
+//     // /CUBO 14
+//    ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(175, 480, 40, 40);
 
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(315, 480, 40, 40);
-
-  // /CUBO 17
-  ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(385, 480, 40, 40);
-
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(385, 480, 40, 40);
-
-   // /CUBO 18
-  ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(455, 480, 40, 40);
-
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(455, 480, 40, 40);
-
-
-   // /CUBO 19
-   ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(525, 480, 40, 40);
-
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(525, 480, 40, 40);
-  
-   // /CUBO 20
-   ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(600, 480, 40, 40);
-
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(600, 480, 40, 40);
-
-
-   // /CUBO 21
-   ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(0, 560, 40, 40);
-
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(0, 560, 40, 40);
-
-
-   // /CUBO 21
-   ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(70, 560, 40, 40);
-
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(70, 560, 40, 40);
-
-
-  // /CUBO 21
-  ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(70, 560, 40, 40);
-
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(70, 560, 40, 40);
-
-
-  // /CUBO 21
-  ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(140, 560, 40, 40);
-
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(140, 560, 40, 40);
-
-
-   // /CUBO 21
-   ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(200, 560, 40, 40);
-
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(200, 560, 40, 40);
-
-  // /CUBO 21
-  ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(280, 560, 40, 40);
-
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(280, 560, 40, 40);
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(175, 480, 40, 40);
 
 
   
-  // /CUBO 21
-  ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(350, 560, 40, 40);
+//     // /CUBO 15
+//     ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(245, 480, 40, 40);
 
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(350, 560, 40, 40);
-
-
-
-  // /CUBO 21
-  ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(420, 560, 40, 40);
-
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(420, 560, 40, 40);
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(245, 480, 40, 40);
 
 
 
-  // /CUBO 21
-  ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(490, 560, 40, 40);
+//     // /CUBO 16
+//     ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(315, 480, 40, 40);
 
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(490, 560, 40, 40);
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(315, 480, 40, 40);
+
+//   // /CUBO 17
+//   ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(385, 480, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(385, 480, 40, 40);
+
+//    // /CUBO 18
+//   ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(455, 480, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(455, 480, 40, 40);
+
+
+//    // /CUBO 19
+//    ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(525, 480, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(525, 480, 40, 40);
+  
+//    // /CUBO 20
+//    ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(600, 480, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(600, 480, 40, 40);
+
+
+//    // /CUBO 21
+//    ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(0, 560, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(0, 560, 40, 40);
+
+
+//    // /CUBO 21
+//    ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(70, 560, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(70, 560, 40, 40);
+
+
+//   // /CUBO 21
+//   ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(70, 560, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(70, 560, 40, 40);
+
+
+//   // /CUBO 21
+//   ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(140, 560, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(140, 560, 40, 40);
+
+
+//    // /CUBO 21
+//    ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(200, 560, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(200, 560, 40, 40);
+
+//   // /CUBO 21
+//   ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(280, 560, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(280, 560, 40, 40);
 
 
   
-  // /CUBO 21
-  ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(560, 560, 40, 40);
+//   // /CUBO 21
+//   ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(350, 560, 40, 40);
 
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(560, 560, 40, 40);
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(350, 560, 40, 40);
+
+
+
+//   // /CUBO 21
+//   ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(420, 560, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(420, 560, 40, 40);
+
+
+
+//   // /CUBO 21
+//   ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(490, 560, 40, 40);
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(490, 560, 40, 40);
 
 
   
-  // /CUBO 21
-  ctx.beginPath();
-  ctx.fillStyle = "#f99702";
-  ctx.fillRect(640, 560, 40, 40);
+//   // /CUBO 21
+//   ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(560, 560, 40, 40);
 
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(640, 560, 40, 40);
-
-//CAMPO 1
-  ctx.fillStyle = '#006f0E';
-  ctx.fillRect(0,410, 900, 20)
-
-    //CAMPO 2
-    ctx.fillStyle = '#37bd00';
-  ctx.fillRect(0,390, 900, 20)
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(560, 560, 40, 40);
 
 
-    //CAMPO 3
-    ctx.fillStyle = '#4aff00';
-  ctx.fillRect(0,370, 900, 20)
+  
+//   // /CUBO 21
+//   ctx.beginPath();
+//   ctx.fillStyle = "#f99702";
+//   ctx.fillRect(640, 560, 40, 40);
 
-  //FLOR
-  ctx.fillStyle = '#37bd00';
-  ctx.fillRect(590,300, 20, 70)
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(640, 560, 40, 40);
 
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(590, 300, 20, 70);
+// //CAMPO 1
+//   ctx.fillStyle = '#006f0E';
+//   ctx.fillRect(0,410, 900, 20)
 
-  //FLOR IZQUIERDO
-  ctx.fillStyle = '#37bd00';
-  ctx.fillRect(550,340, 40, 15)
-
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(550, 340, 40, 15);
+//     //CAMPO 2
+//     ctx.fillStyle = '#37bd00';
+//   ctx.fillRect(0,390, 900, 20)
 
 
-  //FLOR DERECHO
-  ctx.fillStyle = '#37bd00';
-  ctx.fillRect(610,320, 40, 15)
+//     //CAMPO 3
+//     ctx.fillStyle = '#4aff00';
+//   ctx.fillRect(0,370, 900, 20)
 
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(610, 320, 40, 15);
+//   //FLOR
+//   ctx.fillStyle = '#37bd00';
+//   ctx.fillRect(590,300, 20, 70)
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(590, 300, 20, 70);
+
+//   //FLOR IZQUIERDO
+//   ctx.fillStyle = '#37bd00';
+//   ctx.fillRect(550,340, 40, 15)
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(550, 340, 40, 15);
+
+
+//   //FLOR DERECHO
+//   ctx.fillStyle = '#37bd00';
+//   ctx.fillRect(610,320, 40, 15)
+
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(610, 320, 40, 15);
   
 
 
-  //PALMA
-  ctx.fillStyle = '#e58e00';
-  ctx.fillRect(400,120, 30, 250)
+//   //PALMA
+//   ctx.fillStyle = '#e58e00';
+//   ctx.fillRect(400,120, 30, 250)
 
-  ctx.strokeStyle = "#00000";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(400, 120, 30, 250);
+//   ctx.strokeStyle = "#00000";
+//   ctx.lineWidth = 5;
+//   ctx.strokeRect(400, 120, 30, 250);
 
-  //PALMA DEL JUEGO
-  var img = new Image();
-  img.src = "palma.png";
-  img.onload = function() {
-    ctx.drawImage(img,180,0, 480, 120);
-  };
+//   //PALMA DEL JUEGO
+//   var img = new Image();
+//   img.src = "palma.png";
+//   img.onload = function() {
+//     ctx.drawImage(img,180,0, 480, 120);
+//   };
 
-  //SONIC
-  var img1 = new Image();
-  img1.src = "sonic.png";
-  img1.onload = function() {
-    ctx.drawImage(img1,0,250, 100, 120);
-  };
-
-
-  //AROS DE ORO
-  ctx.beginPath();
-  ctx.strokeStyle = "#fff302";
-  ctx.lineWidth = 3
-  ctx.arc(280, 320, 20, 0, 2 * Math.PI);
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.strokeStyle = "#fff302";
-  ctx.lineWidth = 3
-  ctx.arc(220, 320, 20, 0, 2 * Math.PI);
-  ctx.stroke();
+//   //SONIC
+//   var img1 = new Image();
+//   img1.src = "sonic.png";
+//   img1.onload = function() {
+//     ctx.drawImage(img1,0,250, 100, 120);
+//   };
 
 
-  ctx.beginPath();
-  ctx.strokeStyle = "#fff302";
-  ctx.lineWidth = 3
-  ctx.arc(160, 320, 20, 0, 2 * Math.PI);
-  ctx.stroke();
+//   //AROS DE ORO
+//   ctx.beginPath();
+//   ctx.strokeStyle = "#fff302";
+//   ctx.lineWidth = 3
+//   ctx.arc(280, 320, 20, 0, 2 * Math.PI);
+//   ctx.stroke();
 
-   //SOL
+//   ctx.beginPath();
+//   ctx.strokeStyle = "#fff302";
+//   ctx.lineWidth = 3
+//   ctx.arc(220, 320, 20, 0, 2 * Math.PI);
+//   ctx.stroke();
 
-  ctx.beginPath();
-  ctx.arc(6, 40, 50, 0, 2 * Math.PI); 
-  ctx.fillStyle = "#FFD700";
-  ctx.fill();
+
+//   ctx.beginPath();
+//   ctx.strokeStyle = "#fff302";
+//   ctx.lineWidth = 3
+//   ctx.arc(160, 320, 20, 0, 2 * Math.PI);
+//   ctx.stroke();
+
+//    //SOL
+
+//   ctx.beginPath();
+//   ctx.arc(6, 40, 50, 0, 2 * Math.PI); 
+//   ctx.fillStyle = "#FFD700";
+//   ctx.fill();
 
 
  
 
 
 
-  function drawciruclo(x,y, radio,color){
-ctx.beginPath();
-ctx.arc(x,y,radio,0,Math.PI * 2,false);
-ctx.fillStyle = color;
-ctx.fill();
-ctx.closePath();
-}
+//   function drawciruclo(x,y, radio,color){
+// ctx.beginPath();
+// ctx.arc(x,y,radio,0,Math.PI * 2,false);
+// ctx.fillStyle = color;
+// ctx.fill();
+// ctx.closePath();
+// }
 
-///GIRASOL
-drawciruclo(600,270,30, "BLACK");
-drawciruclo(555,280,20, "#f1c000");
-drawciruclo(565,240,20, "#f1c000");
-drawciruclo(600,225,20, "#f1c000");
-drawciruclo(635,245,20, "#f1c000");
-drawciruclo(635,290,20, "#f1c000");
-drawciruclo(595,300,20, "#f1c000");
-drawciruclo(600,260,10, "#ffffff");
-
-
-
-
-
-
-
-
-
-
+// ///GIRASOL
+// drawciruclo(600,270,30, "BLACK");
+// drawciruclo(555,280,20, "#f1c000");
+// drawciruclo(565,240,20, "#f1c000");
+// drawciruclo(600,225,20, "#f1c000");
+// drawciruclo(635,245,20, "#f1c000");
+// drawciruclo(635,290,20, "#f1c000");
+// drawciruclo(595,300,20, "#f1c000");
+// drawciruclo(600,260,10, "#ffffff");
 
 
 ///////////////////////////////////////////////////SUPER MARIO BROS ACT 23////////////////////////////////////////////////////////////
@@ -907,7 +1072,6 @@ drawciruclo(600,260,10, "#ffffff");
         // ctx.fillRect(420, 120, 200, 100);
 
         </script>
-        </body>
-        </html>
+</body>
 
-
+</html>
